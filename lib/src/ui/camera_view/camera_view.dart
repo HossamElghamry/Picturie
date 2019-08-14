@@ -19,7 +19,7 @@ class CameraView extends StatefulWidget {
   _CameraViewState createState() => _CameraViewState();
 }
 
-class _CameraViewState extends State<CameraView> with TickerProviderStateMixin {
+class _CameraViewState extends State<CameraView> {
   CameraController _cameraController;
   Future<void> _initializeControllerFuture;
 
