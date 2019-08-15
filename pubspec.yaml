@@ -65,6 +65,7 @@ flutter:
     - family: Alcubierre
       fonts:
         - asset: assets/font/Alcubierre.otf
+        
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

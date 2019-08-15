@@ -1,6 +1,8 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:picturie/src/common/tabs.dart';
 import 'package:picturie/src/global_bloc.dart';
+import 'package:picturie/src/ui/camera_view/camera_view.dart';
+import 'package:picturie/src/ui/display_view/display_view.dart';
 import 'package:picturie/src/ui/profile_view/profile_view.dart';
 import 'package:picturie/src/ui/tab_view/bottom_bar_item.dart';
 import 'package:provider/provider.dart';
@@ -12,9 +14,12 @@ class HomeTabView extends StatefulWidget {
 
 class _HomeTabViewState extends State<HomeTabView> {
   PageController _pageController;
+  GlobalKey<CameraViewState> globalKey;
+
   @override
   void initState() {
     _pageController = PageController(initialPage: 0);
+    globalKey = GlobalKey();
     super.initState();
   }
 
@@ -24,13 +29,27 @@ class _HomeTabViewState extends State<HomeTabView> {
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.camera,
-        ),
-        onPressed: () {},
-        elevation: 6.0,
-      ),
+      floatingActionButton: StreamBuilder<int>(
+          stream: globalBloc.currentTabView$,
+          builder: (context, snapshot) {
+            return FloatingActionButton(
+              heroTag: null,
+              backgroundColor: snapshot.data == 2
+                  ? Theme.of(context).floatingActionButtonTheme.backgroundColor
+                  : Colors.white,
+              child: Icon(
+                snapshot.data == 2 ? Icons.camera_alt : Icons.camera,
+              ),
+              onPressed: () async {
+                if (snapshot.data != 2) {
+                  _pageController.jumpToPage(2);
+                } else {
+                  globalKey.currentState.capturePhoto(context);
+                }
+              },
+              elevation: 6.0,
+            );
+          }),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -41,6 +60,7 @@ class _HomeTabViewState extends State<HomeTabView> {
           Container(
             color: Colors.black,
           ),
+          CameraView(key: globalKey),
           Container(
             color: Colors.green,
           ),
@@ -71,14 +91,14 @@ class _HomeTabViewState extends State<HomeTabView> {
             Padding(
               padding: EdgeInsets.only(left: 20.0),
               child: BottomBarItem(
-                index: 2,
+                index: 3,
                 icon: Icons.cloud_upload,
                 title: "Ranking",
                 pageController: _pageController,
               ),
             ),
             BottomBarItem(
-              index: 3,
+              index: 4,
               icon: Icons.settings,
               title: "Settings",
               pageController: _pageController,
@@ -90,5 +110,3 @@ class _HomeTabViewState extends State<HomeTabView> {
     );
   }
 }
-
-
