@@ -2,6 +2,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:picturie/src/ui/camera_view/camera_view.dart';
+import 'package:picturie/src/ui/sign_in/sign_in.dart';
 import 'package:picturie/src/ui/tab_view/tab_view.dart';
 import 'package:provider/provider.dart';
 
@@ -21,7 +22,7 @@ class Picturie extends StatelessWidget {
       },
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: HomeTabView(),
+        home: SignInScreen(),
         theme: ThemeData(
           brightness: Brightness.dark,
           fontFamily: 'Alcubierre',
