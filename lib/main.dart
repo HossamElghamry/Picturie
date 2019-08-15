@@ -25,6 +25,8 @@ class Picturie extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         home: HomeTabView(),
         theme: ThemeData.dark(),
+        darkTheme:
+            ThemeData(fontFamily: "Alcubierre", brightness: Brightness.dark),
         // CameraView(camera: firstCamera),
       ),
     );
