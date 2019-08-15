@@ -11,9 +11,9 @@ class DividerCentereText extends StatelessWidget {
           ),
         ),
         Container(
-          width: 50,
+          width: 120,
           child: Center(
-            child: Text("OR"),
+            child: Text("Or Sign Up With"),
           ),
         ),
         Expanded(

@@ -1,4 +1,3 @@
-import 'package:picturie/src/common/tabs.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GlobalBloc {
