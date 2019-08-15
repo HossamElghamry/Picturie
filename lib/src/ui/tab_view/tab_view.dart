@@ -1,8 +1,6 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:picturie/src/ui/camera_view/camera_view.dart';
-import 'package:picturie/src/ui/display_view/display_view.dart';
 import 'package:picturie/src/ui/profile_view/profile_view.dart';
 import 'package:picturie/src/ui/tab_view/bottom_bar_item.dart';
 import 'package:provider/provider.dart';
