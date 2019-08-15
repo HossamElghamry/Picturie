@@ -1,3 +1,4 @@
+import 'package:picturie/src/common/tabs.dart';
 import 'package:rxdart/rxdart.dart';
 
 class GlobalBloc {
@@ -8,23 +9,8 @@ class GlobalBloc {
     _currentTabView$ = BehaviorSubject<int>.seeded(0);
   }
 
-  void changeHomeTab(int tabIndex) {
-    switch (tabIndex) {
-      case 0:
-        _currentTabView$.add(0);
-        break;
-      case 1:
-        _currentTabView$.add(1);
-        break;
-      case 2:
-        _currentTabView$.add(2);
-        break;
-      case 3:
-        _currentTabView$.add(3);
-        break;
-      default:
-        _currentTabView$.add(0);
-    }
+  void changeHomeTab(int pageIndex) {
+    _currentTabView$.add(pageIndex);
   }
 
   void dispose() {
