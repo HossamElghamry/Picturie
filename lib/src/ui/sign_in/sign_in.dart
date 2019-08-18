@@ -7,7 +7,22 @@ import 'package:picturie/src/ui/sign_in/widgets/picturie_logo.dart';
 import 'package:picturie/src/ui/sign_in/widgets/sign_in_alternative.dart';
 import 'package:picturie/src/ui/sign_in/widgets/sign_in_button.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
+  @override
+  _SignInScreenState createState() => _SignInScreenState();
+}
+
+class _SignInScreenState extends State<SignInScreen> {
+  TextEditingController _emailController;
+  TextEditingController _passwordController;
+
+  @override
+  void initState() {
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,15 +38,17 @@ class SignInScreen extends StatelessWidget {
               ),
               Flexible(
                 flex: 1,
-                child: EmailFormField(),
+                child: EmailFormField(controller: _emailController),
               ),
               Flexible(
                 flex: 1,
-                child: PasswordFormField(),
+                child: PasswordFormField(controller: _passwordController),
               ),
               Flexible(
                 flex: 1,
-                child: SignInButton(),
+                child: SignInButton(
+                    emailController: _emailController,
+                    passwordController: _passwordController),
               ),
               Flexible(
                 flex: 1,
@@ -66,5 +83,12 @@ class SignInScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

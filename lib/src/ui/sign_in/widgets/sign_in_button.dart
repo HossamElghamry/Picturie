@@ -1,6 +1,18 @@
 import 'package:flutter/material.dart';
 
-class SignInButton extends StatelessWidget {
+class SignInButton extends StatefulWidget {
+  final TextEditingController _emailController;
+  final TextEditingController _passwordController;
+
+  SignInButton({Key key, emailController, passwordController})
+      : _emailController = emailController,
+        _passwordController = passwordController;
+
+  @override
+  _SignInButtonState createState() => _SignInButtonState();
+}
+
+class _SignInButtonState extends State<SignInButton> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,7 +26,10 @@ class SignInButton extends StatelessWidget {
             fontSize: 20,
           ),
         ),
-        onPressed: () {},
+        onPressed: () {
+          print(widget._emailController.text);
+          print(widget._passwordController.text);
+        },
       ),
     );
   }
