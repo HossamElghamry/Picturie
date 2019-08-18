@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:picturie/src/ui/camera_view/camera_view.dart';
 import 'package:picturie/src/ui/profile_view/profile_view.dart';
+import 'package:picturie/src/ui/settings_view/settings.dart';
 import 'package:picturie/src/ui/tab_view/bottom_bar_item.dart';
 import 'package:provider/provider.dart';
 
@@ -62,9 +63,7 @@ class _HomeTabViewState extends State<HomeTabView> {
           Container(
             color: Colors.green,
           ),
-          Container(
-            color: Colors.black,
-          )
+          SettingsView()
         ],
       ),
       bottomNavigationBar: BottomAppBar(

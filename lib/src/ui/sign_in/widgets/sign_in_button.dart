@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/ui/tab_view/tab_view.dart';
+import 'package:provider/provider.dart';
 
 class SignInButton extends StatefulWidget {
   final TextEditingController _emailController;
@@ -17,6 +19,8 @@ class SignInButton extends StatefulWidget {
 class _SignInButtonState extends State<SignInButton> {
   @override
   Widget build(BuildContext context) {
+    final AuthService _authService = Provider.of<AuthService>(context);
+
     return Container(
       width: double.infinity,
       child: RaisedButton(
@@ -33,17 +37,9 @@ class _SignInButtonState extends State<SignInButton> {
           String _password = widget._passwordController.text;
           // print(widget._emailController.text);
           // print(widget._passwordController.text);
-          try {
-            FirebaseUser userId = await FirebaseAuth.instance
-                .signInWithEmailAndPassword(email: _email, password: _password);
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeTabView(),
-              ),
-            );
-          } catch (e) {
+          Future<FirebaseUser> user =
+              _authService.picturieSignIn(_email, _password).catchError((e) {
             Scaffold.of(context).showSnackBar(
               SnackBar(
                 content: Text('Invalid Credentials'),
@@ -51,8 +47,8 @@ class _SignInButtonState extends State<SignInButton> {
                 duration: Duration(seconds: 3),
               ),
             );
-            print(e.message);
-          }
+          });
+          // _authService.signOut();
         },
       ),
     );

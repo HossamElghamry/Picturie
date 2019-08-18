@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/platforms.dart';
 import 'package:picturie/src/ui/sign_in/widgets/divider_centeredtext.dart';
 import 'package:picturie/src/ui/sign_in/widgets/email_field.dart';
