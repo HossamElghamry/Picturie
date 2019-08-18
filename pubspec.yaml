@@ -25,6 +25,10 @@ dependencies:
   gallery_saver: ^1.0.1
   rxdart: ^0.22.1+1
   provider: ^3.0.0+1
+  firebase_core: ^0.4.0+1
+  firebase_auth: ^0.11.1+3
+  cloud_firestore: ^0.12.9
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2

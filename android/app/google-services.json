@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "441506321821",
+    "firebase_url": "https://picturie-1bcc3.firebaseio.com",
+    "project_id": "picturie-1bcc3",
+    "storage_bucket": "picturie-1bcc3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:441506321821:android:96d557c83cc02ff5",
+        "android_client_info": {
+          "package_name": "com.example.picturie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "441506321821-ptkht2hvh8t4fp9olilm0cu4t52722rl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.picturie",
+            "certificate_hash": "585c75c0b2c00a9895ff127ff6130a5313753079"
+          }
+        },
+        {
+          "client_id": "441506321821-crmlj39052hcg9fgs3qsaio8kgcoidjl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlRnM1Ru12hg_DVkKg1k9-d_WhKS36VRE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "441506321821-crmlj39052hcg9fgs3qsaio8kgcoidjl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
