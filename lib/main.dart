@@ -41,11 +41,11 @@ class _PicturieState extends State<Picturie> {
       dispose: (context, bloc) {
         bloc.dispose();
       },
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: Provider.value(
-          value: authService,
-          child: StreamBuilder<FirebaseUser>(
+      child: Provider.value(
+        value: authService,
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: StreamBuilder<FirebaseUser>(
             stream: authService.user,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -58,16 +58,15 @@ class _PicturieState extends State<Picturie> {
               }
             },
           ),
+          theme: ThemeData(
+            brightness: Brightness.dark,
+            fontFamily: 'Alcubierre',
+          ),
+          darkTheme: ThemeData(
+            fontFamily: 'Alcubierre',
+            brightness: Brightness.dark,
+          ),
         ),
-        theme: ThemeData(
-          brightness: Brightness.dark,
-          fontFamily: 'Alcubierre',
-        ),
-        darkTheme: ThemeData(
-          fontFamily: 'Alcubierre',
-          brightness: Brightness.dark,
-        ),
-
         // CameraView(camera: firstCamera),
       ),
     );

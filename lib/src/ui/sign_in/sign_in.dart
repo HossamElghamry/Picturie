@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/platforms.dart';
+import 'package:picturie/src/common/sign_in_data.dart';
 import 'package:picturie/src/ui/sign_in/widgets/divider_centeredtext.dart';
 import 'package:picturie/src/ui/sign_in/widgets/email_field.dart';
 import 'package:picturie/src/ui/sign_in/widgets/password_field.dart';
@@ -14,19 +15,20 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
+  GlobalKey<FormState> _signInFormKey;
+  SignInData _signInData;
 
   @override
   void initState() {
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
+    _signInFormKey = GlobalKey<FormState>();
+    _signInData = SignInData("", "");
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomPadding: false,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15.0, vertical: 30),
         child: Container(
@@ -38,25 +40,42 @@ class _SignInScreenState extends State<SignInScreen> {
                 child: PicturieLogo(),
               ),
               Flexible(
-                flex: 1,
-                child: EmailFormField(controller: _emailController),
-              ),
-              Flexible(
-                flex: 1,
-                child: PasswordFormField(controller: _passwordController),
-              ),
-              Flexible(
-                flex: 1,
-                child: SignInButton(
-                    emailController: _emailController,
-                    passwordController: _passwordController),
+                flex: 3,
+                child: Container(
+                  child: Form(
+                    key: _signInFormKey,
+                    child: Column(
+                      children: <Widget>[
+                        Flexible(
+                          flex: 1,
+                          child: EmailFormField(
+                            signInData: _signInData,
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: PasswordFormField(
+                            signInData: _signInData,
+                          ),
+                        ),
+                        Flexible(
+                          flex: 1,
+                          child: SignInButton(
+                            data: _signInData,
+                            formKey: _signInFormKey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
               Flexible(
                 flex: 1,
                 child: DividerCentereText(),
               ),
               Flexible(
-                flex: 2,
+                flex: 4,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -64,10 +83,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       platform: Platform.Picturie,
                       logoPath: 'assets/icons/facebook_icon.png',
                     ),
-                    SignInPlatformButton(
-                      platform: Platform.Facebook,
-                      logoPath: 'assets/icons/facebook_icon.png',
-                    ),
+                    // SignInPlatformButton(
+                    //   platform: Platform.Facebook,
+                    //   logoPath: 'assets/icons/facebook_icon.png',
+                    // ),
                     SignInPlatformButton(
                       platform: Platform.Google,
                       logoPath: 'assets/icons/google_icon.png',
@@ -84,12 +103,5 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
   }
 }

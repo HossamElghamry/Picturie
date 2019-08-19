@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:picturie/src/common/sign_in_data.dart';
 
 class PasswordFormField extends StatefulWidget {
-  final TextEditingController _passwordController;
+  final SignInData _signInData;
 
-  PasswordFormField({Key key, controller}) : _passwordController = controller;
+  PasswordFormField({Key key, signInData}) : _signInData = signInData;
 
   @override
   _PasswordFormFieldState createState() => _PasswordFormFieldState();
@@ -15,13 +16,23 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
     return Container(
       height: double.infinity,
       child: TextFormField(
-        controller: widget._passwordController,
         obscureText: true,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.lock),
           hintText: " Password",
         ),
+        validator: _validatePassword,
+        onSaved: (String acceptedPassword) {
+          widget._signInData.password = acceptedPassword;
+        },
       ),
     );
+  }
+
+  String _validatePassword(String password) {
+    if (password.length < 4) {
+      return "Password must at least contain 8 characters";
+    }
+    return null;
   }
 }

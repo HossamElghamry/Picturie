@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:picturie/src/common/sign_in_data.dart';
 
 class EmailFormField extends StatefulWidget {
-  final TextEditingController _emailController;
+  final SignInData _signInData;
 
-  EmailFormField({Key key, controller}) : _emailController = controller;
+  EmailFormField({Key key, signInData}) : _signInData = signInData;
 
   @override
   _EmailFormFieldState createState() => _EmailFormFieldState();
@@ -15,12 +16,23 @@ class _EmailFormFieldState extends State<EmailFormField> {
     return Container(
       height: double.infinity,
       child: TextFormField(
-        controller: widget._emailController,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.email),
           hintText: " E-mail",
         ),
+        validator: _validateEmail,
+        onSaved: (String acceptedEmail) {
+          widget._signInData.email = acceptedEmail;
+        },
       ),
     );
+  }
+
+  String _validateEmail(String email) {
+    //TODO: Validate
+    if (!email.contains('@')) {
+      return "The e-mail address entered must be a valid one.";
+    }
+    return null;
   }
 }

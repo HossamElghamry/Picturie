@@ -1,16 +1,16 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
+import 'package:picturie/src/common/sign_in_data.dart';
 import 'package:picturie/src/ui/tab_view/tab_view.dart';
 import 'package:provider/provider.dart';
 
 class SignInButton extends StatefulWidget {
-  final TextEditingController _emailController;
-  final TextEditingController _passwordController;
-
-  SignInButton({Key key, emailController, passwordController})
-      : _emailController = emailController,
-        _passwordController = passwordController;
+  GlobalKey<FormState> _formKey;
+  final SignInData _data;
+  SignInButton({Key key, formKey, data})
+      : _formKey = formKey,
+        _data = data;
 
   @override
   _SignInButtonState createState() => _SignInButtonState();
@@ -33,21 +33,43 @@ class _SignInButtonState extends State<SignInButton> {
           ),
         ),
         onPressed: () async {
-          String _email = widget._emailController.text;
-          String _password = widget._passwordController.text;
-          // print(widget._emailController.text);
-          // print(widget._passwordController.text);
-
-          Future<FirebaseUser> user =
-              _authService.picturieSignIn(_email, _password).catchError((e) {
+          if (widget._formKey.currentState.validate()) {
+            widget._formKey.currentState.save();
+            Future<FirebaseUser> user = _authService
+                .picturieSignIn(widget._data.email, widget._data.password)
+                .catchError((e) {
+              Scaffold.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Invalid Credentials'),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: "Tap to Hide",
+                    textColor: Colors.black,
+                    onPressed: () {
+                      Scaffold.of(context).hideCurrentSnackBar();
+                    },
+                  ),
+                ),
+              );
+            });
+          } else {
             Scaffold.of(context).showSnackBar(
               SnackBar(
-                content: Text('Invalid Credentials'),
+                content: Text('There are invalid input data'),
                 backgroundColor: Colors.red,
                 duration: Duration(seconds: 3),
+                action: SnackBarAction(
+                  label: "Tap to Hide",
+                  textColor: Colors.black,
+                  onPressed: () {
+                    Scaffold.of(context).hideCurrentSnackBar();
+                  },
+                ),
               ),
             );
-          });
+          }
+
           // _authService.signOut();
         },
       ),
