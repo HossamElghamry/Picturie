@@ -46,7 +46,7 @@ class _PicturieState extends State<Picturie> {
         home: Provider.value(
           value: authService,
           child: StreamBuilder<FirebaseUser>(
-            stream: FirebaseAuth.instance.onAuthStateChanged,
+            stream: authService.user,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
