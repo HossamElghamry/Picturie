@@ -17,7 +17,7 @@ class _SignUpUsernameFieldState extends State<SignUpUsernameField> {
       child: TextFormField(
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.person),
-          hintText: "Enter your username",
+          hintText: "Enter the desired username",
         ),
         validator: _validateUsername,
         onSaved: (String acceptedUsername) {

@@ -33,49 +33,51 @@ class _SignInButtonState extends State<SignInButton> {
             fontSize: 20,
           ),
         ),
-        onPressed: () async {
-          if (widget._formKey.currentState.validate()) {
-            widget._formKey.currentState.save();
-            try {
-              FirebaseUser user = await _authService.picturieSignIn(
-                  widget._data.email, widget._data.password);
-            } on Exception catch (e) {
-              widget._scaffoldKey.currentState.showSnackBar(
-                SnackBar(
-                  content: Text('Invalid credentials'),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: "Tap to hide",
-                    textColor: Colors.black,
-                    onPressed: () {
-                      Scaffold.of(context).hideCurrentSnackBar();
-                    },
-                  ),
-                ),
-              );
-              _authService.cancelLoad();
-            }
-          } else {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('There are invalid input data'),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 3),
-                action: SnackBarAction(
-                  label: "Tap to Hide",
-                  textColor: Colors.black,
-                  onPressed: () {
-                    Scaffold.of(context).hideCurrentSnackBar();
-                  },
-                ),
-              ),
-            );
-          }
-
-          // _authService.signOut();
+        onPressed: () {
+          validateAndSignIn(_authService);
         },
       ),
     );
+  }
+
+  validateAndSignIn(_authService) async {
+    if (widget._formKey.currentState.validate()) {
+      widget._formKey.currentState.save();
+      try {
+        FirebaseUser user = await _authService.picturieSignIn(
+            widget._data.email, widget._data.password);
+      } on Exception catch (e) {
+        widget._scaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text('Invalid credentials'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            action: SnackBarAction(
+              label: "Tap to hide",
+              textColor: Colors.black,
+              onPressed: () {
+                widget._scaffoldKey.currentState.hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+        _authService.cancelLoad();
+      }
+    } else {
+      widget._scaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text('There are invalid input data'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          action: SnackBarAction(
+            label: "Tap to Hide",
+            textColor: Colors.black,
+            onPressed: () {
+              widget._scaffoldKey.currentState.hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }
   }
 }

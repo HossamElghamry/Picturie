@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/picturie_loading_indicator.dart';
+import 'package:picturie/src/common/picturie_logo_text.dart';
 import 'package:picturie/src/common/platforms.dart';
 import 'package:picturie/src/common/sign_in_data.dart';
 import 'package:picturie/src/ui/sign_in/widgets/divider_centeredtext.dart';
 import 'package:picturie/src/ui/sign_in/widgets/email_field.dart';
 import 'package:picturie/src/ui/sign_in/widgets/password_field.dart';
-import 'package:picturie/src/ui/sign_in/widgets/picturie_logo.dart';
 import 'package:picturie/src/ui/sign_in/widgets/sign_in_button.dart';
 import 'package:picturie/src/ui/sign_in/widgets/sign_up_platform.dart';
 import 'package:provider/provider.dart';
@@ -54,7 +54,9 @@ class _SignInScreenState extends State<SignInScreen> {
                   children: <Widget>[
                     Flexible(
                       flex: 1,
-                      child: PicturieLogo(),
+                      child: PicturieTextLogo(
+                        textSize: 50.0,
+                      ),
                     ),
                     Flexible(
                       flex: 3,

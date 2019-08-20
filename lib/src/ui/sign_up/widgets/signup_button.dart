@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/sign_up_data.dart';
+import 'package:picturie/src/ui/profile_photo_signup/profile_photo_signup.dart';
 import 'package:provider/provider.dart';
 
 class SignUpSubmitButton extends StatefulWidget {
@@ -34,48 +35,56 @@ class _SignUpSubmitButtonState extends State<SignUpSubmitButton> {
           ),
         ),
         onPressed: () async {
-          if (widget._formKey.currentState.validate()) {
-            widget._formKey.currentState.save();
-            try {
-              await _authService.picturieSignUp(widget._data);
-              FirebaseUser user = await _authService.picturieSignIn(
-                  widget._data.email, widget._data.password);
-              Navigator.of(context).pop();
-            } on Exception catch (e) {
-              widget._signUpScaffoldKey.currentState.showSnackBar(
-                SnackBar(
-                  content: Text('Email already exists'),
-                  backgroundColor: Colors.red,
-                  duration: Duration(seconds: 3),
-                  action: SnackBarAction(
-                    label: "Tap to Hide",
-                    textColor: Colors.black,
-                    onPressed: () {
-                      Scaffold.of(context).hideCurrentSnackBar();
-                    },
-                  ),
-                ),
-              );
-              _authService.cancelLoad();
-            }
-          } else {
-            Scaffold.of(context).showSnackBar(
-              SnackBar(
-                content: Text('There are invalid input data'),
-                backgroundColor: Colors.red,
-                duration: Duration(seconds: 3),
-                action: SnackBarAction(
-                  label: "Tap to Hide",
-                  textColor: Colors.black,
-                  onPressed: () {
-                    Scaffold.of(context).hideCurrentSnackBar();
-                  },
-                ),
-              ),
-            );
-          }
+          validateAndSignUp(_authService);
         },
       ),
     );
+  }
+
+  validateAndSignUp(_authService) async {
+    if (widget._formKey.currentState.validate()) {
+      widget._formKey.currentState.save();
+      try {
+        await _authService.picturieSignUp(widget._data);
+        FirebaseUser user = await _authService.picturieSignIn(
+            widget._data.email, widget._data.password);
+        Navigator.of(widget._signUpScaffoldKey.currentContext).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => ProfilePhotoSignUp(),
+          ),
+        );
+      } on Exception catch (e) {
+        widget._signUpScaffoldKey.currentState.showSnackBar(
+          SnackBar(
+            content: Text('Email already exists'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+            action: SnackBarAction(
+              label: "Tap to Hide",
+              textColor: Colors.black,
+              onPressed: () {
+                widget._signUpScaffoldKey.currentState.hideCurrentSnackBar();
+              },
+            ),
+          ),
+        );
+        _authService.cancelLoad();
+      }
+    } else {
+      widget._signUpScaffoldKey.currentState.showSnackBar(
+        SnackBar(
+          content: Text('There are invalid input data'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 3),
+          action: SnackBarAction(
+            label: "Tap to Hide",
+            textColor: Colors.black,
+            onPressed: () {
+              widget._signUpScaffoldKey.currentState.hideCurrentSnackBar();
+            },
+          ),
+        ),
+      );
+    }
   }
 }

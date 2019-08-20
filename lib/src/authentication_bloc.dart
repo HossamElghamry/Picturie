@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:path/path.dart';
 import 'package:picturie/src/common/sign_up_data.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class AuthService {
   FirebaseAuth _auth;
@@ -94,6 +98,18 @@ class AuthService {
         'posts': 0
       },
     );
+  }
+
+  Future<String> uploadProfilePicture(File image) async {
+    loading.add(true);
+    String fileName = basename(image.path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
+    StorageTaskSnapshot downloadURL = await uploadTask.onComplete;
+    final String imageURL = await downloadURL.ref.getDownloadURL();
+    loading.add(false);
+    return imageURL;
   }
 
   void cancelLoad() {

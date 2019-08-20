@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/picturie_loading_indicator.dart';
+import 'package:picturie/src/common/picturie_logo.dart';
 import 'package:picturie/src/common/sign_up_data.dart';
-import 'package:picturie/src/ui/sign_up/widgets/profile_picture_button.dart';
 import 'package:picturie/src/ui/sign_up/widgets/signup_button.dart';
 import 'package:picturie/src/ui/sign_up/widgets/signup_email_field.dart';
 import 'package:picturie/src/ui/sign_up/widgets/signup_password_field.dart';
@@ -34,6 +34,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         key: _signUpScaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
+          centerTitle: true,
+          title: Text("Picturie Signup"),
           elevation: 0.0,
         ),
         body: StreamBuilder<bool>(
@@ -56,7 +58,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: <Widget>[
                         Flexible(
                           flex: 2,
-                          child: ProfilePictureButton(),
+                          child: PicturieLogo(radius: 110.0),
                         ),
                         SizedBox(
                           height: 10,
