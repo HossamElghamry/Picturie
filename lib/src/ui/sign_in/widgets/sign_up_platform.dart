@@ -18,6 +18,8 @@ class SignInPlatformButton extends StatelessWidget {
     return FloatingActionButton(
       heroTag: null,
       backgroundColor: Colors.teal,
+      hoverElevation: 5,
+      elevation: 3,
       onPressed: () {
         switch (_platform) {
           case Platform.Picturie:
@@ -53,8 +55,8 @@ class SignInPlatformButton extends StatelessWidget {
         }
       },
       child: Container(
-        width: 30,
-        height: 30,
+        width: _platform == Platform.Picturie ? 40 : 30,
+        height: _platform == Platform.Picturie ? 40 : 30,
         child: Image.asset(
           _logoPath,
           color: Colors.white,

@@ -1,15 +1,18 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
-import 'package:picturie/src/common/sign_in_data.dart';
 import 'package:picturie/src/common/sign_up_data.dart';
 import 'package:provider/provider.dart';
 
 class SignUpSubmitButton extends StatefulWidget {
-  GlobalKey<FormState> _formKey;
+  final GlobalKey<FormState> _formKey;
   final SignUpData _data;
-  SignUpSubmitButton({Key key, formKey, data})
+  final GlobalKey<ScaffoldState> _signUpScaffoldKey;
+
+  SignUpSubmitButton({Key key, formKey, data, signUpScaffoldKey})
       : _formKey = formKey,
-        _data = data;
+        _data = data,
+        _signUpScaffoldKey = signUpScaffoldKey;
 
   @override
   _SignUpSubmitButtonState createState() => _SignUpSubmitButtonState();
@@ -33,10 +36,28 @@ class _SignUpSubmitButtonState extends State<SignUpSubmitButton> {
         onPressed: () async {
           if (widget._formKey.currentState.validate()) {
             widget._formKey.currentState.save();
-            await _authService.picturieSignUp(widget._data);
-            await _authService.picturieSignIn(
-                widget._data.email, widget._data.password);
-            Navigator.of(context).pop();
+            try {
+              await _authService.picturieSignUp(widget._data);
+              FirebaseUser user = await _authService.picturieSignIn(
+                  widget._data.email, widget._data.password);
+              Navigator.of(context).pop();
+            } on Exception catch (e) {
+              widget._signUpScaffoldKey.currentState.showSnackBar(
+                SnackBar(
+                  content: Text('Email already exists'),
+                  backgroundColor: Colors.red,
+                  duration: Duration(seconds: 3),
+                  action: SnackBarAction(
+                    label: "Tap to Hide",
+                    textColor: Colors.black,
+                    onPressed: () {
+                      Scaffold.of(context).hideCurrentSnackBar();
+                    },
+                  ),
+                ),
+              );
+              _authService.cancelLoad();
+            }
           } else {
             Scaffold.of(context).showSnackBar(
               SnackBar(

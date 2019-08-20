@@ -19,7 +19,7 @@ class _PasswordFormFieldState extends State<PasswordFormField> {
         obscureText: true,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.lock),
-          hintText: " Password",
+          hintText: "Password",
         ),
         validator: _validatePassword,
         onSaved: (String acceptedPassword) {

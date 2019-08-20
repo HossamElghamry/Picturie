@@ -2,15 +2,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/sign_in_data.dart';
-import 'package:picturie/src/ui/tab_view/tab_view.dart';
 import 'package:provider/provider.dart';
 
 class SignInButton extends StatefulWidget {
-  GlobalKey<FormState> _formKey;
+  final GlobalKey<FormState> _formKey;
   final SignInData _data;
-  SignInButton({Key key, formKey, data})
+  final GlobalKey<ScaffoldState> _scaffoldKey;
+  SignInButton({Key key, formKey, data, scaffoldKey})
       : _formKey = formKey,
-        _data = data;
+        _data = data,
+        _scaffoldKey = scaffoldKey;
 
   @override
   _SignInButtonState createState() => _SignInButtonState();
@@ -35,16 +36,17 @@ class _SignInButtonState extends State<SignInButton> {
         onPressed: () async {
           if (widget._formKey.currentState.validate()) {
             widget._formKey.currentState.save();
-            Future<FirebaseUser> user = _authService
-                .picturieSignIn(widget._data.email, widget._data.password)
-                .catchError((e) {
-              Scaffold.of(context).showSnackBar(
+            try {
+              FirebaseUser user = await _authService.picturieSignIn(
+                  widget._data.email, widget._data.password);
+            } on Exception catch (e) {
+              widget._scaffoldKey.currentState.showSnackBar(
                 SnackBar(
-                  content: Text('Invalid Credentials'),
+                  content: Text('Invalid credentials'),
                   backgroundColor: Colors.red,
                   duration: Duration(seconds: 3),
                   action: SnackBarAction(
-                    label: "Tap to Hide",
+                    label: "Tap to hide",
                     textColor: Colors.black,
                     onPressed: () {
                       Scaffold.of(context).hideCurrentSnackBar();
@@ -52,7 +54,8 @@ class _SignInButtonState extends State<SignInButton> {
                   ),
                 ),
               );
-            });
+              _authService.cancelLoad();
+            }
           } else {
             Scaffold.of(context).showSnackBar(
               SnackBar(

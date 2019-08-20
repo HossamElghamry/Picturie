@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:picturie/src/common/sign_in_data.dart';
 import 'package:picturie/src/common/sign_up_data.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -46,7 +45,6 @@ class AuthService {
 
   Future<FirebaseUser> picturieSignIn(String email, String password) async {
     loading.add(true);
-
     FirebaseUser user = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     updateUser(user);
@@ -96,6 +94,10 @@ class AuthService {
         'posts': 0
       },
     );
+  }
+
+  void cancelLoad() {
+    loading.add(false);
   }
 
   void signOut() {

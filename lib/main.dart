@@ -1,15 +1,13 @@
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
+import 'package:picturie/src/common/picturie_loading_indicator.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:picturie/src/ui/camera_view/camera_view.dart';
 import 'package:picturie/src/ui/sign_in/sign_in.dart';
-import 'package:picturie/src/ui/sign_up/sign_up.dart';
 import 'package:picturie/src/ui/tab_view/tab_view.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/services.dart';
-import 'package:rxdart/rxdart.dart';
 
 void main() {
   runApp(Picturie());
@@ -49,7 +47,9 @@ class _PicturieState extends State<Picturie> {
             stream: authService.user,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return Scaffold(
+                  body: PicturieLoadingIndicator(),
+                );
               } else {
                 if (snapshot.hasData) {
                   return HomeTabView();

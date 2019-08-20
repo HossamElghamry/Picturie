@@ -18,7 +18,7 @@ class _EmailFormFieldState extends State<EmailFormField> {
       child: TextFormField(
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.email),
-          hintText: " E-mail",
+          hintText: "E-mail",
         ),
         validator: _validateEmail,
         onSaved: (String acceptedEmail) {
