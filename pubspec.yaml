@@ -32,6 +32,12 @@ dependencies:
   google_sign_in: ^4.0.6
   flare_flutter: ^1.5.5
   firebase_storage: ^3.0.5
+  flutter_launcher_icons: "^0.7.2"
+  
+flutter_icons:
+  android: "picturie_logo" 
+  ios: true
+  image_path: "assets/icons/picturie_logo.png"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

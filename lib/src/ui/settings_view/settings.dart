@@ -9,7 +9,7 @@ class SettingsView extends StatelessWidget {
     final AuthService _authService = Provider.of<AuthService>(context);
     return Scaffold(
       body: StreamBuilder<bool>(
-          stream: _authService.loading,
+          stream: _authService.loading$,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Container();

@@ -20,9 +20,11 @@ class Picturie extends StatefulWidget {
 
 class _PicturieState extends State<Picturie> {
   AuthService authService;
+  GlobalBloc globalBloc;
   @override
   void initState() {
     authService = AuthService();
+    globalBloc = GlobalBloc();
     super.initState();
   }
 
@@ -32,42 +34,41 @@ class _PicturieState extends State<Picturie> {
       SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
 
-    return Provider<GlobalBloc>(
-      builder: (context) {
-        return GlobalBloc();
-      },
-      dispose: (context, bloc) {
-        bloc.dispose();
-      },
-      child: Provider.value(
-        value: authService,
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          home: StreamBuilder<FirebaseUser>(
-            stream: authService.user,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Scaffold(
-                  body: PicturieLoadingIndicator(),
-                );
-              } else {
-                if (snapshot.hasData) {
-                  return HomeTabView();
-                }
-                return SignInScreen();
-              }
-            },
-          ),
-          theme: ThemeData(
-            brightness: Brightness.dark,
-            fontFamily: 'Alcubierre',
-          ),
-          darkTheme: ThemeData(
-            fontFamily: 'Alcubierre',
-            brightness: Brightness.dark,
-          ),
+    return MultiProvider(
+      providers: [
+        Provider.value(
+          value: authService,
         ),
-        // CameraView(camera: firstCamera),
+        Provider.value(
+          value: globalBloc,
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: StreamBuilder<FirebaseUser>(
+          stream: authService.user$,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Scaffold(
+                body: PicturieLoadingIndicator(),
+              );
+            } else {
+              if (snapshot.hasData) {
+                globalBloc.resetView();
+                return HomeTabView();
+              }
+              return SignInScreen();
+            }
+          },
+        ),
+        theme: ThemeData(
+          brightness: Brightness.dark,
+          fontFamily: 'Alcubierre',
+        ),
+        darkTheme: ThemeData(
+          fontFamily: 'Alcubierre',
+          brightness: Brightness.dark,
+        ),
       ),
     );
   }

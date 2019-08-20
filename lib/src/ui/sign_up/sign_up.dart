@@ -39,7 +39,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           elevation: 0.0,
         ),
         body: StreamBuilder<bool>(
-            stream: _authService.loading,
+            stream: _authService.loading$,
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
                 return Container();

@@ -35,7 +35,7 @@ class _ProfilePhotoSignUpState extends State<ProfilePhotoSignUp> {
         elevation: 0.0,
       ),
       body: StreamBuilder<bool>(
-        stream: _authService.loading,
+        stream: _authService.loading$,
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Container();

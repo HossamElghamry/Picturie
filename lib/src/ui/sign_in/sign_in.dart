@@ -36,7 +36,7 @@ class _SignInScreenState extends State<SignInScreen> {
       key: _scaffoldKey,
       resizeToAvoidBottomPadding: false,
       body: StreamBuilder<bool>(
-          stream: _authService.loading,
+          stream: _authService.loading$,
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
               return Container();

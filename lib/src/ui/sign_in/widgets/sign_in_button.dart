@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/sign_in_data.dart';
+import 'package:picturie/src/global_bloc.dart';
 import 'package:provider/provider.dart';
 
 class SignInButton extends StatefulWidget {
@@ -21,6 +22,7 @@ class _SignInButtonState extends State<SignInButton> {
   @override
   Widget build(BuildContext context) {
     final AuthService _authService = Provider.of<AuthService>(context);
+    final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
 
     return Container(
       width: double.infinity,

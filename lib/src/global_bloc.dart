@@ -12,6 +12,10 @@ class GlobalBloc {
     _currentTabView$.add(pageIndex);
   }
 
+  void resetView() {
+    _currentTabView$.add(0);
+  }
+
   void dispose() {
     _currentTabView$.close();
   }
