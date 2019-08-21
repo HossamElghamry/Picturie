@@ -18,8 +18,4 @@ class SkipButton extends StatelessWidget {
       ),
     );
   }
-
-  void uploadImage() {
-    return;
-  }
 }

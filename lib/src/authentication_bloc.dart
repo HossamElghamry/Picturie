@@ -23,8 +23,8 @@ class AuthService {
   BehaviorSubject<PicturieUser> _picturieProfile$;
   BehaviorSubject<PicturieUser> get picturieProfile$ => _picturieProfile$;
 
-  BehaviorSubject<String> _profilePicturUrl$;
-  BehaviorSubject<String> get username$ => _profilePicturUrl$;
+  BehaviorSubject<String> _profilePictureUrl$;
+  BehaviorSubject<String> get profilePictureUrl$ => _profilePictureUrl$;
 
   BehaviorSubject<int> _likes$;
   BehaviorSubject<int> get likes$ => _likes$;
@@ -43,7 +43,7 @@ class AuthService {
     _picturieProfile$ = BehaviorSubject<PicturieUser>();
     _likes$ = BehaviorSubject<int>();
     _numberOfPicturies$ = BehaviorSubject<int>();
-    _profilePicturUrl$ = BehaviorSubject<String>();
+    _profilePictureUrl$ = BehaviorSubject<String>();
     _uid$ = BehaviorSubject<String>();
 
     _user$ = Observable(_auth.onAuthStateChanged);
@@ -74,7 +74,7 @@ class AuthService {
   }
 
   void setProfilePicture(String url) {
-    _profilePicturUrl$.sink.add(url);
+    _profilePictureUrl$.sink.add(url);
   }
 
   void setNumberOfPicturies(int numberOfPicturies) {
@@ -94,9 +94,9 @@ class AuthService {
         _database.collection('users').document(getCurrentUserId());
     int _likes = _likes$.value;
     int _numberOfPicturies = _numberOfPicturies$.value;
-    String _profilePictureUrl = _profilePicturUrl$.value;
+    String _profilePictureUrl = _profilePictureUrl$.value;
 
-    ref.setData(
+    ref.updateData(
       {
         'profilePictureUrl': _profilePictureUrl,
         'likes': _likes,
@@ -195,7 +195,7 @@ class AuthService {
     _loading$.add(true);
     String fileName = basename(image.path);
     StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child(fileName);
+        FirebaseStorage.instance.ref().child("profile_pictures/" + fileName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(image);
     StorageTaskSnapshot downloadURL = await uploadTask.onComplete;
     final String imageURL = await downloadURL.ref.getDownloadURL();
@@ -207,7 +207,7 @@ class AuthService {
     _picturieProfile$.close();
     _numberOfPicturies$.close();
     _likes$.close();
-    _profilePicturUrl$.close();
+    _profilePictureUrl$.close();
     _loading$.close();
     _uid$.close();
   }

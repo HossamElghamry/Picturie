@@ -35,7 +35,8 @@ class ConfirmButton extends StatelessWidget {
                   label: "Tap to Hide",
                   textColor: Colors.black,
                   onPressed: () {
-                    Scaffold.of(context).hideCurrentSnackBar();
+                    _profileUploadScaffoldKey.currentState
+                        .hideCurrentSnackBar();
                   },
                 ),
               ),
@@ -43,6 +44,8 @@ class ConfirmButton extends StatelessWidget {
           } else {
             try {
               String imageURL = await _authService.uploadProfilePicture(_image);
+              _authService.setProfilePicture(imageURL);
+              _authService.updateUser();
               Navigator.of(_profileUploadScaffoldKey.currentContext).pop();
             } catch (e) {
               _profileUploadScaffoldKey.currentState.showSnackBar(

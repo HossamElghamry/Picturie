@@ -20,8 +20,9 @@ class AccountName extends StatelessWidget {
               return Text(
                 snapshot.data.username,
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 30,
                   color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               );
             }),
