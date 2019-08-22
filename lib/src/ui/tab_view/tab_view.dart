@@ -11,44 +11,47 @@ class HomeTabView extends StatefulWidget {
   _HomeTabViewState createState() => _HomeTabViewState();
 }
 
-class _HomeTabViewState extends State<HomeTabView> {
+class _HomeTabViewState extends State<HomeTabView>
+    with AutomaticKeepAliveClientMixin {
   PageController _pageController;
   GlobalKey<CameraViewState> globalKey;
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: 0);
+    _pageController = PageController();
     globalKey = GlobalKey();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: StreamBuilder<int>(
-          stream: globalBloc.currentTabView$,
-          builder: (context, snapshot) {
-            return FloatingActionButton(
-              heroTag: null,
-              backgroundColor: snapshot.data == 2
-                  ? Theme.of(context).floatingActionButtonTheme.backgroundColor
-                  : Colors.white,
-              child: Icon(
-                snapshot.data == 2 ? Icons.camera_alt : Icons.camera,
-              ),
-              onPressed: () async {
-                if (snapshot.data != 2) {
-                  _pageController.jumpToPage(2);
-                } else {
-                  globalKey.currentState.capturePhoto(context);
-                }
-              },
-              elevation: 6.0,
-            );
-          }),
+        stream: globalBloc.currentTabView$,
+        builder: (context, snapshot) {
+          return FloatingActionButton(
+            heroTag: null,
+            backgroundColor: snapshot.data == 2
+                ? Theme.of(context).floatingActionButtonTheme.backgroundColor
+                : Colors.white,
+            child: Icon(
+              snapshot.data == 2 ? Icons.camera_alt : Icons.camera,
+            ),
+            onPressed: () async {
+              print(snapshot.data);
+              if (snapshot.data != 2) {
+                _pageController.jumpToPage(2);
+              } else {
+                globalKey.currentState.capturePhoto(context);
+              }
+            },
+            elevation: 6.0,
+          );
+        },
+      ),
       body: PageView(
         controller: _pageController,
         onPageChanged: (index) {
@@ -106,4 +109,7 @@ class _HomeTabViewState extends State<HomeTabView> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

@@ -17,8 +17,8 @@ class AuthService {
   Observable<FirebaseUser> _user$;
   Observable<FirebaseUser> get user$ => _user$;
 
-  BehaviorSubject<String> _uid$;
-  BehaviorSubject<String> get uid => _uid$;
+  // BehaviorSubject<String> _uid$;
+  // BehaviorSubject<String> get uid => _uid$;
 
   BehaviorSubject<PicturieUser> _picturieProfile$;
   BehaviorSubject<PicturieUser> get picturieProfile$ => _picturieProfile$;
@@ -29,11 +29,13 @@ class AuthService {
   BehaviorSubject<int> _likes$;
   BehaviorSubject<int> get likes$ => _likes$;
 
-  BehaviorSubject<int> _numberOfPicturies$;
-  BehaviorSubject<int> get numberOfPicturies$ => _numberOfPicturies$;
+  BehaviorSubject<List<dynamic>> _picturiePosts$;
+  BehaviorSubject<List<dynamic>> get picturiePosts$ => _picturiePosts$;
 
   BehaviorSubject<bool> _loading$;
   BehaviorSubject<bool> get loading$ => _loading$;
+
+  String userID;
 
   AuthService() {
     _auth = FirebaseAuth.instance;
@@ -42,14 +44,15 @@ class AuthService {
 
     _picturieProfile$ = BehaviorSubject<PicturieUser>();
     _likes$ = BehaviorSubject<int>();
-    _numberOfPicturies$ = BehaviorSubject<int>();
+    _picturiePosts$ = BehaviorSubject<List<dynamic>>();
     _profilePictureUrl$ = BehaviorSubject<String>();
-    _uid$ = BehaviorSubject<String>();
+    // _uid$ = BehaviorSubject<String>();
 
     _user$ = Observable(_auth.onAuthStateChanged);
     _user$.listen(
       (currentUser) {
         if (currentUser != null) {
+          userID = currentUser.uid;
           _database
               .collection('users')
               .document(currentUser.uid)
@@ -77,30 +80,35 @@ class AuthService {
     _profilePictureUrl$.sink.add(url);
   }
 
-  void setNumberOfPicturies(int numberOfPicturies) {
-    _numberOfPicturies$.sink.add(numberOfPicturies);
+  void addPicturiePost(String imageUrl) {
+    List<dynamic> tmp = List<dynamic>.from(_picturiePosts$.value);
+    tmp.add(imageUrl);
+    _picturiePosts$.sink.add(tmp);
   }
 
-  void addUserId(String uid) {
-    _uid$.sink.add(uid);
+  void setPicturiePosts(List<dynamic> posts) {
+    _picturiePosts$.sink.add(posts);
   }
 
-  String getCurrentUserId() {
-    return _uid$.value;
-  }
+  // void addUserId(String uid) {
+  //   _uid$.sink.add(uid);
+  // }
+
+  // String getCurrentUserId() {
+  //   return _uid$.value;
+  // }
 
   void updateUser() async {
-    DocumentReference ref =
-        _database.collection('users').document(getCurrentUserId());
+    DocumentReference ref = _database.collection('users').document(userID);
     int _likes = _likes$.value;
-    int _numberOfPicturies = _numberOfPicturies$.value;
+    List<dynamic> _picturiePosts = _picturiePosts$.value;
     String _profilePictureUrl = _profilePictureUrl$.value;
 
     ref.updateData(
       {
         'profilePictureUrl': _profilePictureUrl,
         'likes': _likes,
-        'numberOfPicturies': _numberOfPicturies,
+        'picturiePosts': _picturiePosts,
       },
     );
     ref.snapshots().listen(
@@ -121,30 +129,28 @@ class AuthService {
         'email': newUser.email,
         'profilePictureUrl': "",
         'likes': 0,
-        'numberOfPicturies': 0,
+        'picturiePosts': [],
       },
     );
     setLikes(0);
-    setNumberOfPicturies(0);
+    setPicturiePosts([]);
   }
 
   Future retrieveUserData() async {
-    var ref = _database
-        .collection('users')
-        .where('uid', isEqualTo: getCurrentUserId())
-        .limit(1);
+    var ref =
+        _database.collection('users').where('uid', isEqualTo: userID).limit(1);
     int likes = await ref
         .getDocuments()
         .then((data) => data.documents[0].data['likes']);
-    int numberOfPicturies = await ref
+    List<dynamic> picturiePosts = await ref
         .getDocuments()
-        .then((data) => data.documents[0].data['numberOfPicturies']);
+        .then((data) => data.documents[0].data['picturiePosts']);
     String profilePhotoUrl = await ref
         .getDocuments()
         .then((data) => data.documents[0].data['profilePictureUrl']);
 
     setLikes(likes);
-    setNumberOfPicturies(numberOfPicturies);
+    setPicturiePosts(picturiePosts);
     setProfilePicture(profilePhotoUrl);
   }
 
@@ -160,7 +166,7 @@ class AuthService {
     _loading$.add(true);
     FirebaseUser user = await _auth.createUserWithEmailAndPassword(
         email: data.email, password: data.password);
-    addUserId(user.uid);
+    userID = user.uid;
     signUpUser(user, data.username);
     _loading$.add(false);
     return user;
@@ -170,7 +176,7 @@ class AuthService {
     _loading$.add(true);
     FirebaseUser user = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
-    addUserId(user.uid);
+    userID = user.uid;
     retrieveUserData();
     _loading$.add(false);
     return user;
@@ -185,7 +191,7 @@ class AuthService {
     AuthCredential credential = GoogleAuthProvider.getCredential(
         idToken: userAuth.idToken, accessToken: userAuth.accessToken);
     FirebaseUser user = await _auth.signInWithCredential(credential);
-    addUserId(user.uid);
+    userID = user.uid;
     retrieveUserData();
     _loading$.add(false);
     return user;
@@ -203,12 +209,24 @@ class AuthService {
     return imageURL;
   }
 
+  Future<String> uploadPicturiePost(String path) async {
+    _loading$.add(true);
+    String fileName = basename(path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child("picturie_posts/" + fileName);
+    StorageUploadTask uploadTask = firebaseStorageRef.putFile(File(path));
+    StorageTaskSnapshot downloadURL = await uploadTask.onComplete;
+    final String imageURL = await downloadURL.ref.getDownloadURL();
+    _loading$.add(false);
+    return imageURL;
+  }
+
   void dispose() {
     _picturieProfile$.close();
-    _numberOfPicturies$.close();
+    _picturiePosts$.close();
     _likes$.close();
     _profilePictureUrl$.close();
     _loading$.close();
-    _uid$.close();
+    // _uid$.close();
   }
 }

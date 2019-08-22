@@ -6,14 +6,14 @@ class PicturieUser {
   String _email;
   String _profilePictureUrl;
   int _likes;
-  int _numberOfPicturies;
+  List<dynamic> _picturiePosts;
 
   String get uid => _uid;
   String get username => _username;
   String get email => _email;
   String get profilePictureUrl => _profilePictureUrl;
   int get likes => _likes;
-  int get numberOfPicturies => _numberOfPicturies;
+  List<dynamic> get picturiePosts => _picturiePosts;
 
   PicturieUser(
     this._uid,
@@ -21,7 +21,7 @@ class PicturieUser {
     this._email,
     this._profilePictureUrl,
     this._likes,
-    this._numberOfPicturies,
+    this._picturiePosts,
   );
 
   factory PicturieUser.fromDocument(DocumentSnapshot documentSnapshot) {
@@ -35,7 +35,7 @@ class PicturieUser {
       data['email'],
       data['profilePictureUrl'],
       data['likes'],
-      data['numberOfPicturies'],
+      data['picturiePosts'],
     );
   }
 }

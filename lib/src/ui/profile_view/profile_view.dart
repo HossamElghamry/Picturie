@@ -4,7 +4,13 @@ import 'package:picturie/src/ui/profile_view/profile_widgets/picture_avatar.dart
 import 'package:picturie/src/ui/profile_view/profile_widgets/post_stats.dart';
 import 'package:picturie/src/ui/profile_view/profile_widgets/picturie_posts.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
+  @override
+  _ProfileViewState createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -34,4 +40,6 @@ class ProfileView extends StatelessWidget {
       ),
     );
   }
+
+  bool get wantKeepAlive => true;
 }

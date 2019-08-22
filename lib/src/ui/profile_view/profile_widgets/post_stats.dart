@@ -32,7 +32,7 @@ class PostStats extends StatelessWidget {
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
-                          snapshot.data.numberOfPicturies.toString(),
+                          snapshot.data.picturiePosts.length.toString(),
                           style: TextStyle(fontSize: 17),
                         )
                       ],

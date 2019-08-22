@@ -82,8 +82,7 @@ class CameraViewState extends State<CameraView> {
   Future<void> initializeCamera() async {
     final cameras = await availableCameras();
     final firstCamera = cameras.first;
-    _cameraController =
-        CameraController(firstCamera, ResolutionPreset.ultraHigh);
+    _cameraController = CameraController(firstCamera, ResolutionPreset.low);
     await _cameraController.initialize();
   }
 

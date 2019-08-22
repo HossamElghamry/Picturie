@@ -1,26 +1,49 @@
 import 'package:flutter/material.dart';
+import 'package:picturie/src/authentication_bloc.dart';
+import 'package:provider/provider.dart';
 
 class PicturiePosts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(top: 12.0),
-      child: Container(
-        child: GridView.builder(
-          physics: BouncingScrollPhysics(),
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-          itemCount: 8,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Container(
-                color: Color(0xFF64FFDA),
+    final AuthService _authService = Provider.of<AuthService>(context);
+
+    return StreamBuilder<List<dynamic>>(
+      stream: _authService.picturiePosts$,
+      builder: (context, snapshot) {
+        if (snapshot.data == [] ||
+            snapshot.data == null ||
+            snapshot.data.length == 0) {
+          _authService.retrieveUserData();
+          return Container(
+            height: double.infinity,
+            child: Center(
+              child: Text(
+                "Take some picturies :)",
+                style: TextStyle(fontSize: 28, color: Colors.white),
               ),
-            );
-          },
-        ),
-      ),
+            ),
+          );
+        }
+        return Padding(
+          padding: EdgeInsets.only(top: 12.0),
+          child: Container(
+            child: GridView.builder(
+              physics: BouncingScrollPhysics(),
+              gridDelegate:
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+              itemCount: snapshot.data.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Container(
+                    child: Image.network(snapshot.data[index]),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }
