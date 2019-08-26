@@ -56,7 +56,7 @@ class _PicturieState extends State<Picturie> {
               if (snapshot.hasData) {
                 return HomeTabView();
               }
-              // authService.signOut();
+              //authService.signOut();
               return SignInScreen();
             }
           },

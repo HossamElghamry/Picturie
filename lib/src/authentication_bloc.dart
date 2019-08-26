@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:path/path.dart';
 import 'package:picturie/src/common/sign_up_data.dart';
 import 'package:picturie/src/models/picturie_user.dart';
+import 'package:picturie/src/models/post.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -16,9 +17,6 @@ class AuthService {
 
   Observable<FirebaseUser> _user$;
   Observable<FirebaseUser> get user$ => _user$;
-
-  // BehaviorSubject<String> _uid$;
-  // BehaviorSubject<String> get uid => _uid$;
 
   BehaviorSubject<PicturieUser> _picturieProfile$;
   BehaviorSubject<PicturieUser> get picturieProfile$ => _picturieProfile$;
@@ -46,7 +44,6 @@ class AuthService {
     _likes$ = BehaviorSubject<int>();
     _picturiePosts$ = BehaviorSubject<List<dynamic>>();
     _profilePictureUrl$ = BehaviorSubject<String>();
-    // _uid$ = BehaviorSubject<String>();
 
     _user$ = Observable(_auth.onAuthStateChanged);
     _user$.listen(
@@ -84,19 +81,72 @@ class AuthService {
     List<dynamic> tmp = List<dynamic>.from(_picturiePosts$.value);
     tmp.add(imageUrl);
     _picturiePosts$.sink.add(tmp);
+
+    DocumentReference ref = _database.collection('posts').document();
+    ref.setData(
+      {
+        'profileUid': userID,
+        'pictureUrl': imageUrl,
+        'likes': 0,
+      },
+    );
+  }
+
+  Future<Post> getPicturiePost(String imageUrl) async {
+    Query ref = _database
+        .collection('posts')
+        .where("pictureUrl", isEqualTo: imageUrl)
+        .limit(1);
+    int likes = await ref
+        .getDocuments()
+        .then((data) => data.documents[0].data['likes']);
+    String profileUid = await ref
+        .getDocuments()
+        .then((data) => data.documents[0].data['profileUid']);
+    String pictureUrl = await ref
+        .getDocuments()
+        .then((data) => data.documents[0].data['pictureUrl']);
+
+    return Post(profileUid, pictureUrl, likes);
+  }
+
+  Future likePost(String imageUrl, String profileUid) async {
+    Query query = _database
+        .collection('posts')
+        .where('pictureUrl', isEqualTo: imageUrl)
+        .limit(1);
+    int likes = await query
+        .getDocuments()
+        .then((data) => data.documents[0].data["likes"]);
+    likes++;
+    await query
+        .getDocuments()
+        .then((data) => data.documents[0].documentID)
+        .then(
+      (uid) {
+        _database
+            .collection('posts')
+            .document(uid)
+            .updateData({"likes": likes});
+      },
+    );
+
+    DocumentReference profileRef =
+        _database.collection('users').document(profileUid);
+    int profileLikes = await profileRef.get().then((doc) {
+      return doc.data["likes"];
+    });
+    profileLikes++;
+    await profileRef.updateData(
+      {
+        'likes': profileLikes,
+      },
+    );
   }
 
   void setPicturiePosts(List<dynamic> posts) {
     _picturiePosts$.sink.add(posts);
   }
-
-  // void addUserId(String uid) {
-  //   _uid$.sink.add(uid);
-  // }
-
-  // String getCurrentUserId() {
-  //   return _uid$.value;
-  // }
 
   void updateUser() async {
     DocumentReference ref = _database.collection('users').document(userID);
@@ -104,7 +154,7 @@ class AuthService {
     List<dynamic> _picturiePosts = _picturiePosts$.value;
     String _profilePictureUrl = _profilePictureUrl$.value;
 
-    ref.updateData(
+    await ref.updateData(
       {
         'profilePictureUrl': _profilePictureUrl,
         'likes': _likes,
@@ -122,7 +172,7 @@ class AuthService {
 
   void signUpUser(FirebaseUser newUser, String username) async {
     DocumentReference ref = _database.collection('users').document(newUser.uid);
-    ref.setData(
+    await ref.setData(
       {
         'uid': newUser.uid,
         'username': username,
@@ -177,7 +227,7 @@ class AuthService {
     FirebaseUser user = await _auth.signInWithEmailAndPassword(
         email: email, password: password);
     userID = user.uid;
-    retrieveUserData();
+    await retrieveUserData();
     _loading$.add(false);
     return user;
   }

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
+import 'package:picturie/src/common/picture_overview.dart';
+import 'package:picturie/src/common/view_post.dart';
 import 'package:provider/provider.dart';
 
 class PicturiePosts extends StatelessWidget {
@@ -33,12 +35,7 @@ class PicturiePosts extends StatelessWidget {
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) {
-                return Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Container(
-                    child: Image.network(snapshot.data[index]),
-                  ),
-                );
+                return PictureOverview(imageUrl: snapshot.data[index]);
               },
             ),
           ),

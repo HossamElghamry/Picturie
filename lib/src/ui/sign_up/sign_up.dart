@@ -34,8 +34,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         key: _signUpScaffoldKey,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: Text("Picturie Signup"),
           elevation: 0.0,
         ),
         body: StreamBuilder<bool>(
@@ -55,10 +53,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   child: Form(
                     key: _signUpFormKey,
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Flexible(
                           flex: 2,
-                          child: PicturieLogo(radius: 110.0),
+                          child: Container(
+                            height: double.infinity,
+                            child: Text(
+                              "Picturie Signup",
+                              style: TextStyle(fontSize: 40),
+                            ),
+                          ),
                         ),
                         SizedBox(
                           height: 10,
