@@ -33,6 +33,9 @@ class AuthService {
   BehaviorSubject<bool> _loading$;
   BehaviorSubject<bool> get loading$ => _loading$;
 
+  BehaviorSubject<List<String>> _randomPosts$;
+  BehaviorSubject<List<String>> get randomPosts$ => _randomPosts$;
+
   String userID;
 
   AuthService() {
@@ -44,7 +47,7 @@ class AuthService {
     _likes$ = BehaviorSubject<int>();
     _picturiePosts$ = BehaviorSubject<List<dynamic>>();
     _profilePictureUrl$ = BehaviorSubject<String>();
-
+    _randomPosts$ = BehaviorSubject<List<String>>.seeded([]);
     _user$ = Observable(_auth.onAuthStateChanged);
     _user$.listen(
       (currentUser) {
@@ -92,6 +95,19 @@ class AuthService {
     );
   }
 
+  Future<void> getRandomPosts() async {
+    QuerySnapshot querySnapshot =
+        await _database.collection('posts').getDocuments();
+    List<String> urlList = [];
+    querySnapshot.documents.shuffle();
+    print(querySnapshot.documents);
+    for (int i = 0; i < querySnapshot.documents.length; i++) {
+      String temp = querySnapshot.documents[i].data["pictureUrl"];
+      urlList.add(temp);
+    }
+    _randomPosts$.add(urlList);
+  }
+
   Future<Post> getPicturiePost(String imageUrl) async {
     Query ref = _database
         .collection('posts')
@@ -110,7 +126,7 @@ class AuthService {
     return Post(profileUid, pictureUrl, likes);
   }
 
-  Future likePost(String imageUrl, String profileUid) async {
+  void likePost(String imageUrl, String profileUid) async {
     Query query = _database
         .collection('posts')
         .where('pictureUrl', isEqualTo: imageUrl)
@@ -277,6 +293,6 @@ class AuthService {
     _likes$.close();
     _profilePictureUrl$.close();
     _loading$.close();
-    // _uid$.close();
+    _randomPosts$.close();
   }
 }

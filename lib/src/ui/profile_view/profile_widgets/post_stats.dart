@@ -29,11 +29,11 @@ class PostStats extends StatelessWidget {
                       children: <Widget>[
                         Text(
                           "Picturies",
-                          style: TextStyle(fontSize: 20),
+                          style: TextStyle(fontSize: 16),
                         ),
                         Text(
                           snapshot.data.picturiePosts.length.toString(),
-                          style: TextStyle(fontSize: 17),
+                          style: TextStyle(fontSize: 25),
                         )
                       ],
                     );
@@ -63,11 +63,11 @@ class PostStats extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         "Likes",
-                        style: TextStyle(fontSize: 20),
+                        style: TextStyle(fontSize: 16),
                       ),
                       Text(
                         snapshot.data.likes.toString(),
-                        style: TextStyle(fontSize: 17),
+                        style: TextStyle(fontSize: 25),
                       ),
                     ],
                   );

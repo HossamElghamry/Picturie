@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
 import 'package:picturie/src/common/picture_overview.dart';
-import 'package:picturie/src/common/view_post.dart';
 import 'package:provider/provider.dart';
 
 class PicturiePosts extends StatelessWidget {
@@ -12,17 +11,22 @@ class PicturiePosts extends StatelessWidget {
     return StreamBuilder<List<dynamic>>(
       stream: _authService.picturiePosts$,
       builder: (context, snapshot) {
-        if (snapshot.data == [] ||
-            snapshot.data == null ||
-            snapshot.data.length == 0) {
+        if (!snapshot.hasData) {
           _authService.retrieveUserData();
-          return Container(
-            height: double.infinity,
-            child: Center(
-              child: Text(
-                "Take some picturies :)",
-                style: TextStyle(fontSize: 28, color: Colors.white),
-              ),
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        if (snapshot.data == [] || snapshot.data.length == 0) {
+          return Center(
+            child: Column(
+              children: <Widget>[
+                Icon(Icons.picture_in_picture),
+                Text(
+                  "Take some picturies",
+                  style: TextStyle(fontSize: 28),
+                ),
+              ],
             ),
           );
         }
@@ -30,7 +34,9 @@ class PicturiePosts extends StatelessWidget {
           padding: EdgeInsets.only(top: 12.0),
           child: Container(
             child: GridView.builder(
-              physics: BouncingScrollPhysics(),
+              physics: AlwaysScrollableScrollPhysics(
+                parent: BouncingScrollPhysics(),
+              ),
               gridDelegate:
                   SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemCount: snapshot.data.length,

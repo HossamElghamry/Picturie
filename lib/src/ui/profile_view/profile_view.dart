@@ -41,5 +41,6 @@ class _ProfileViewState extends State<ProfileView>
     );
   }
 
+  @override
   bool get wantKeepAlive => true;
 }

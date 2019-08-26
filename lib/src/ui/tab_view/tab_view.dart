@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:picturie/src/ui/camera_view/camera_view.dart';
+import 'package:picturie/src/ui/explore_view/explore_view.dart';
 import 'package:picturie/src/ui/profile_view/profile_view.dart';
 import 'package:picturie/src/ui/settings_view/settings.dart';
 import 'package:picturie/src/ui/tab_view/bottom_bar_item.dart';
@@ -59,13 +60,9 @@ class _HomeTabViewState extends State<HomeTabView>
         },
         children: <Widget>[
           ProfileView(),
-          Container(
-            color: Colors.black,
-          ),
+          ExploreView(),
           CameraView(key: globalKey),
-          Container(
-            color: Colors.green,
-          ),
+          SettingsView(),
           SettingsView()
         ],
       ),
@@ -84,7 +81,7 @@ class _HomeTabViewState extends State<HomeTabView>
               child: BottomBarItem(
                 index: 1,
                 icon: Icons.search,
-                title: "Search",
+                title: "Explore",
                 pageController: _pageController,
               ),
             ),

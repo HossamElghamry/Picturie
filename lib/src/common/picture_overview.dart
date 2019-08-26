@@ -25,9 +25,13 @@ class PictureOverview extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(color: Colors.grey, width: 2),
           ),
-          child: Image.network(
-            _imageUrl,
+          child: FadeInImage.assetNetwork(
             fit: BoxFit.cover,
+            placeholderScale: 0.1,
+            fadeInCurve: Curves.fastOutSlowIn,
+            imageScale: 0.1,
+            placeholder: "assets/icons/picturie_logo.png",
+            image: _imageUrl,
           ),
         ),
       ),

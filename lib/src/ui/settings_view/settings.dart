@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
+import 'package:picturie/src/common/picturie_appbar.dart';
 import 'package:picturie/src/common/picturie_loading_indicator.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,9 @@ class SettingsView extends StatelessWidget {
     final AuthService _authService = Provider.of<AuthService>(context);
     final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
     return Scaffold(
+      appBar: PicturieAppbar(
+        title: "Settings",
+      ),
       body: StreamBuilder<bool>(
         stream: _authService.loading$,
         builder: (context, snapshot) {
