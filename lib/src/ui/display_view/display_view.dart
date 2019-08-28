@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:picturie/src/authentication_bloc.dart';
+import 'package:picturie/src/common/picturie_appbar.dart';
 import 'package:picturie/src/common/picturie_loading_indicator.dart';
 import 'package:picturie/src/global_bloc.dart';
 import 'package:provider/provider.dart';
@@ -26,8 +27,10 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
   @override
   Widget build(BuildContext context) {
     final AuthService _authService = Provider.of<AuthService>(context);
-    final GlobalBloc globalBloc = Provider.of<GlobalBloc>(context);
     return Scaffold(
+      appBar: PicturieAppbar(
+        title: "Upload post",
+      ),
       key: _postUploadScaffoldKey,
       body: StreamBuilder<bool>(
         stream: _authService.loading$,
@@ -58,12 +61,31 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.38,
+                      height: 45,
                       child: RaisedButton(
+                        elevation: 0,
                         shape: StadiumBorder(),
                         color: Colors.teal,
-                        child: Text("Upload Picturie"),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Icon(
+                              Icons.cloud_upload,
+                              size: 29,
+                            ),
+                            Text(
+                              "Upload",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                         onPressed: () async {
                           try {
                             String imageURL = await _authService
@@ -86,18 +108,42 @@ class _DisplayPictureScreenState extends State<DisplayPictureScreen> {
                         },
                       ),
                     ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      width: MediaQuery.of(context).size.width * 0.38,
+                      height: 45,
                       child: RaisedButton(
+                        elevation: 0,
                         shape: StadiumBorder(),
-                        color: Colors.red,
-                        child: Text("Cancel Post"),
+                        color: Colors.red[700],
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: <Widget>[
+                            Icon(
+                              Icons.cancel,
+                              size: 29,
+                            ),
+                            Text(
+                              "Cancel ",
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
                         onPressed: () {
                           Navigator.of(_postUploadScaffoldKey.currentContext)
                               .pop();
                         },
                       ),
-                    )
+                    ),
+                    Expanded(
+                      child: Divider(
+                        color: Colors.grey,
+                      ),
+                    ),
                   ],
                 ),
               )

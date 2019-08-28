@@ -43,7 +43,7 @@ class PicturieLoadingIndicator extends StatelessWidget {
               child: Text(
                 _status,
                 style: TextStyle(
-                  fontSize: 30,
+                  fontSize: 28,
                   color: Colors.white,
                 ),
               ),

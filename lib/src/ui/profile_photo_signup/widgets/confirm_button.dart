@@ -16,19 +16,33 @@ class ConfirmButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final AuthService _authService = Provider.of<AuthService>(context);
     return Container(
-      width: MediaQuery.of(context).size.width * 0.4,
+      width: MediaQuery.of(context).size.width * 0.38,
+      height: 45,
       child: RaisedButton(
+        elevation: 0,
         shape: StadiumBorder(),
         color: Colors.teal,
-        child: Text(
-          "Confirm",
-          style: TextStyle(fontSize: 18),
+        child: Row(
+          children: <Widget>[
+            Flexible(
+              flex: 1,
+              child: Icon(
+                Icons.file_upload,
+                size: 34,
+              ),
+            ),
+            Text(
+              " UPLOAD",
+              style: TextStyle(fontSize: 22),
+            ),
+          ],
         ),
         onPressed: () async {
           if (_image == null) {
             _profileUploadScaffoldKey.currentState.showSnackBar(
               SnackBar(
-                content: Text('Please select an image to upload'),
+                content:
+                    Text('Please select an image by tapping the picturie icon'),
                 backgroundColor: Colors.red,
                 duration: Duration(seconds: 3),
                 action: SnackBarAction(

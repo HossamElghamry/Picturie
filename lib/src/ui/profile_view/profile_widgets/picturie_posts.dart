@@ -20,12 +20,17 @@ class PicturiePosts extends StatelessWidget {
         if (snapshot.data == [] || snapshot.data.length == 0) {
           return Center(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Icon(Icons.picture_in_picture),
                 Text(
-                  "Take some picturies",
+                  "Take\nSome\nPicturies!",
+                  textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 28),
                 ),
+                Icon(Icons.arrow_downward),
+                SizedBox(
+                  height: 40,
+                )
               ],
             ),
           );

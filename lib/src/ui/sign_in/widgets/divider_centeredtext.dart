@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DividerCentereText extends StatelessWidget {
+class DividerCenterText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(

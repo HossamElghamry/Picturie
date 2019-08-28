@@ -38,7 +38,6 @@ class _SettingsFABSState extends State<SettingsFABS>
                 width: 60.0,
                 child: FloatingActionButton(
                   heroTag: null,
-                  backgroundColor: Colors.teal,
                   child: AnimatedBuilder(
                     animation: _animationController,
                     builder: (BuildContext context, Widget child) {
@@ -72,7 +71,6 @@ class _SettingsFABSState extends State<SettingsFABS>
                     ),
                   ),
                   child: FloatingActionButton(
-                    backgroundColor: Colors.teal,
                     heroTag: null,
                     shape: StadiumBorder(),
                     child: Icon(_icons[index]),

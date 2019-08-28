@@ -92,7 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     ),
                     Flexible(
                       flex: 1,
-                      child: DividerCentereText(),
+                      child: DividerCenterText(),
                     ),
                     Flexible(
                       flex: 4,
