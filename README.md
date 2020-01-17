@@ -1,5 +1,9 @@
 <h1 align="center">Picturie</h1>
 
+<div align="center">
+  <strong>Cross-Platform Application for Reducing Social Media Addiction</strong>
+</div>
+
 ## Key Features
  * The application will decline any upload from the mobile’s gallery. This will eliminate the selfies, filters and followers’aspects that mainly affect the user’s addiction part of the brain. 
  * Images can only be uploaded using the mobile’s camera. 
